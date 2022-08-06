@@ -17,8 +17,10 @@ typedef struct debouncer_t_
 
 void debouncer_init(debouncer_t *debouncer);
 void debouncer_update(debouncer_t *debouncer, uint32_t port_state_raw);
+
 uint32_t debouncer_get_port_rising(debouncer_t *debouncer);
 uint32_t debouncer_get_port_falling(debouncer_t *debouncer);
-uint8_t debouncer_get_pin(debouncer_t *debouncer, uint32_t pin_no);
+uint8_t debouncer_get_pin_rising(debouncer_t *debouncer, uint32_t pin_no);
+uint8_t debouncer_get_pin_falling(debouncer_t *debouncer, uint32_t pin_no);
 
 #endif /* DEBOUNCER_H_ */
