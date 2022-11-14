@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-typedef struct _sevenseg_t
+typedef struct sevenseg
 {
     
 } sevenseg_t;
