@@ -1,7 +1,7 @@
 
 #include "env.h"
 
-envfunc_t env_funcs[NUM_ENV_TYPES] =
+env_func_t env_funcs[NUM_ENV_TYPES] =
 {
 	env_lin,
 	env_exp,

@@ -19,21 +19,21 @@ typedef enum
 	ENV_DEC,
 	ENV_SUS,
 	ENV_REL
-} envstate_t;
+} env_state_t;
 
-typedef volatile struct _env_t env_t; // forward declaration
+typedef volatile struct env env_t; // forward declaration
 
-typedef void (*envfunc_t)(env_t *);
+typedef void (*env_func_t)(env_t *);
 
-struct _env_t
+struct env
 {
 	// internal values
 	int32_t value;
 	int32_t acc;
-	envstate_t state;
+	env_state_t state;
 
 	// user parameters
-	envfunc_t func;
+	env_func_t func;
 
 	uint16_t attack;  // 0 - 65535
 	uint16_t decay;   // 0 - 65535
