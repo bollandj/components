@@ -16,16 +16,12 @@ typedef void (*wave_func_t)(wave_t *);
 
 struct wave
 {
-  // internal accumulator
-  int32_t acc;
+    uint16_t value;
+    int32_t acc;
 
-  // output
-  uint16_t value;
-
-  // user parameters
-  wave_func_t func;
-
-  int32_t freq;
+    /* User parameters */
+    wave_func_t func;
+    int32_t freq;
 };
 
 #define WAVE_DEFAULT 	\
@@ -36,11 +32,19 @@ struct wave
     .freq = 0     		\
 }
 
-#define NUM_WAVE_FUNCS 4
+typedef enum 
+{
+    WAVE_TYPE_SAW_UP=0,
+    WAVE_TYPE_SAW_DOWN,
+    WAVE_TYPE_SQR,
+    WAVE_TYPE_TRI,
+    WAVE_TYPE_NOISE,
+    WAVE_TYPE_SH,
+    NUM_WAVE_TYPES
+} wave_type_t;
 
-void wave_saw(wave_t *wave);
-void wave_sqr(wave_t *wave);
-void wave_noise(wave_t *wave);
-void wave_tri(wave_t *wave);
+inline void wave_update(wave_t *wave) {wave->func(wave);};
+inline void wave_set_freq(wave_t *wave, uint32_t freq) {wave->freq = freq;};
+void wave_set_type(wave_t *wave, wave_type_t type);
 
 #endif /* WAVE_H_ */
