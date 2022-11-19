@@ -24,14 +24,6 @@ struct wave
     int32_t freq;
 };
 
-#define WAVE_DEFAULT 	\
-{              			\
-    .acc = 0,        	\
-    .value = 0,      	\
-    .func = wave_saw,	\
-    .freq = 0     		\
-}
-
 typedef enum 
 {
     WAVE_TYPE_SAW_UP=0,
@@ -43,7 +35,11 @@ typedef enum
     NUM_WAVE_TYPES
 } wave_type_t;
 
+void wave_init(wave_t *wave);
+
 inline void wave_update(wave_t *wave) {wave->func(wave);};
+inline uint16_t wave_get_value(wave_t *wave) {return wave->value;};
+
 inline void wave_set_freq(wave_t *wave, uint32_t freq) {wave->freq = freq;};
 void wave_set_type(wave_t *wave, wave_type_t type);
 

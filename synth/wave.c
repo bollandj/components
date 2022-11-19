@@ -95,10 +95,17 @@ static wave_func_t wave_funcs[NUM_WAVE_TYPES] =
 
 // static_assert(sizeof(wave_funcs)/sizeof(wave_func_t) == NUM_WAVE_TYPES)
 
+void wave_init(wave_t *wave)
+{
+    wave->acc = 0;
+    wave->value = 0;
+
+    wave->func = wave_funcs[0];
+    wave->freq = 0;
+}
+
 void wave_set_type(wave_t *wave, wave_type_t type)
 {
     assert(type < NUM_WAVE_TYPES);
     wave->func = wave_funcs[type];
 };
-
-

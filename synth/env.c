@@ -92,10 +92,21 @@ static env_func_t env_funcs[NUM_ENV_TYPES] =
 
 // static_assert(sizeof(env_funcs)/sizeof(env_func_t) == NUM_ENV_TYPES)
 
+void env_init(env_t *env)
+{
+    env->value = 0;
+    env->acc = 0;
+    env->state = ENV_OFF;
+
+    env->func = env_exp;
+    env->attack = 500;
+    env->decay = 500;
+    env->sustain = (1<<19);
+    env->release = 500;
+}
+
 void env_set_type(env_t *env, env_type_t type)
 {
     assert(type < NUM_ENV_TYPES);
     env->func = env_funcs[type];
-};
-
-
+}

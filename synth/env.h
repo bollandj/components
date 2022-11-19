@@ -39,18 +39,6 @@ struct env
     uint16_t release; // 0 - 65535
 };
 
-#define ENV_DEFAULT		\
-{              			\
-    .value = 0,      	\
-    .acc = 0,         	\
-    .state = ENV_OFF,	\
-    .func = env_exp,	\
-    .attack = 500,   	\
-    .decay = 500,       \
-    .sustain = (1<<19),	\
-    .release = 500   	\
-}
-
 typedef enum 
 {
     ENV_TYPE_LIN=0,
@@ -58,7 +46,11 @@ typedef enum
     NUM_ENV_TYPES
 } env_type_t;
 
+void env_init(env_t *env);
+
 inline void env_update(env_t *env) {env->func(env);};
+inline uint16_t env_get_value(env_t *env) {return env->value;};
+
 inline void env_set_attack(env_t *env, uint16_t attack) {env->attack = attack;};
 inline void env_set_decay(env_t *env, uint16_t decay) {env->decay = decay;};
 inline void env_set_sustain(env_t *env, uint32_t sustain) {env->sustain = sustain;};
