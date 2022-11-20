@@ -4,12 +4,6 @@
 
 #include <stdint.h>
 
-#define ENV_OUT_BITS 12 // 1 - 16
-#define ENV_OUT_MASK ((1<<ENV_OUT_BITS) - 1)
-
-#define ENV_ACC_BITS 20 // 1 - 31
-#define ENV_ACC_MASK ((1<<ENV_ACC_BITS) - 1)
-
 #define ENV_EXP_THRESHOLD 4
 
 typedef enum
@@ -31,6 +25,11 @@ struct env
     int32_t acc;
     env_state_t state;
 
+    uint8_t out_bits;
+    uint32_t out_mask;
+    uint8_t acc_bits;
+    uint32_t acc_mask;
+
     /* User parameters */
     env_func_t func;
     uint16_t attack;  // 0 - 65535
@@ -46,7 +45,7 @@ typedef enum
     NUM_ENV_TYPES
 } env_type_t;
 
-void env_init(env_t *env);
+void env_init(env_t *env, uint8_t num_out_bits, uint8_t num_acc_bits);
 
 inline void env_update(env_t *env) {env->func(env);};
 inline uint16_t env_get_value(env_t *env) {return env->value;};

@@ -9,9 +9,9 @@ static void env_lin(env_t *env)
     {
         case ENV_ATT:
             env->acc += env->attack;
-            if (env->acc >= ENV_ACC_MASK)
+            if (env->acc >= env->acc_mask)
             {
-                env->acc = ENV_ACC_MASK;
+                env->acc = env->acc_mask;
                 env->state = ENV_DEC;
             }
             break;
@@ -38,27 +38,27 @@ static void env_lin(env_t *env)
             env->acc = 0u;
     }
 
-    env->value = env->acc >> (ENV_ACC_BITS - ENV_OUT_BITS);
+    env->value = env->acc >> (env->acc_bits - env->out_bits);
 }
 
-void env_exp(env_t *env)
+static void env_exp(env_t *env)
 {
     int32_t diff;
 
     switch (env->state)
     {
         case ENV_ATT:
-            diff = (ENV_ACC_MASK + (ENV_ACC_MASK >> ENV_EXP_THRESHOLD) - env->acc) >> (ENV_ACC_BITS - 16);
+            diff = (env->acc_mask + (env->acc_mask >> ENV_EXP_THRESHOLD) - env->acc) >> (env->acc_bits - 16);
             env->acc += (diff * env->attack) >> 14;
-            if (env->acc >= ENV_ACC_MASK)
+            if (env->acc >= env->acc_mask)
             {
-                env->acc = ENV_ACC_MASK;
+                env->acc = env->acc_mask;
                 env->state = ENV_DEC;
             }
             break;
 
         case ENV_DEC:
-            diff = (env->acc - (env->sustain + (env->sustain >> ENV_EXP_THRESHOLD))) >> (ENV_ACC_BITS - 16);
+            diff = (env->acc - (env->sustain + (env->sustain >> ENV_EXP_THRESHOLD))) >> (env->acc_bits - 16);
             env->acc -= (diff * env->decay) >> 14;
             if (env->acc < env->sustain)
                 env->state = ENV_SUS;
@@ -68,7 +68,7 @@ void env_exp(env_t *env)
             break;
 
         case ENV_REL:
-            diff = (env->acc + (ENV_ACC_MASK >> ENV_EXP_THRESHOLD)) >> (ENV_ACC_BITS - 16);
+            diff = (env->acc + (env->acc_mask >> ENV_EXP_THRESHOLD)) >> (env->acc_bits - 16);
             env->acc -= (diff * env->release) >> 14;
             if (env->acc < 0)
             {
@@ -81,7 +81,7 @@ void env_exp(env_t *env)
             env->acc = 0u;
     }
 
-    env->value = env->acc >> (ENV_ACC_BITS - ENV_OUT_BITS);
+    env->value = env->acc >> (env->acc_bits - env->out_bits);
 }
 
 static env_func_t env_funcs[NUM_ENV_TYPES] =
@@ -92,11 +92,16 @@ static env_func_t env_funcs[NUM_ENV_TYPES] =
 
 // static_assert(sizeof(env_funcs)/sizeof(env_func_t) == NUM_ENV_TYPES)
 
-void env_init(env_t *env)
+void env_init(env_t *env, uint8_t num_out_bits, uint8_t num_acc_bits)
 {
     env->value = 0;
     env->acc = 0;
     env->state = ENV_OFF;
+
+    env->out_bits = num_out_bits;
+    env->out_mask = (1 << num_out_bits) - 1;
+    env->acc_bits = num_acc_bits;
+    env->acc_mask = (1 << num_acc_bits) - 1;
 
     env->func = env_exp;
     env->attack = 500;

@@ -4,12 +4,6 @@
 
 #include <stdint.h>
 
-#define WAVE_OUT_BITS 10 // 1 - 16
-#define WAVE_OUT_MASK ((1<<WAVE_OUT_BITS) - 1)
-
-#define WAVE_ACC_BITS 24 // 1 - 32
-#define WAVE_ACC_MASK ((1<<WAVE_ACC_BITS) - 1)
-
 typedef volatile struct wave wave_t; // forward declaration
 
 typedef void (*wave_func_t)(wave_t *);
@@ -18,6 +12,11 @@ struct wave
 {
     uint16_t value;
     int32_t acc;
+
+    uint8_t out_bits;
+    uint32_t out_mask;
+    uint8_t acc_bits;
+    uint32_t acc_mask;
 
     /* User parameters */
     wave_func_t func;
@@ -35,7 +34,7 @@ typedef enum
     NUM_WAVE_TYPES
 } wave_type_t;
 
-void wave_init(wave_t *wave);
+void wave_init(wave_t *wave, uint8_t num_out_bits, uint8_t num_acc_bits);
 
 inline void wave_update(wave_t *wave) {wave->func(wave);};
 inline uint16_t wave_get_value(wave_t *wave) {return wave->value;};

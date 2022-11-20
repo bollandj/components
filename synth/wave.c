@@ -6,25 +6,25 @@
 static void wave_saw_up(wave_t *wave)
 {
     wave->acc += wave->freq;
-    wave->acc &= WAVE_ACC_MASK;
+    wave->acc &= wave->acc_mask;
 
-    wave->value = wave->acc >> (WAVE_ACC_BITS - WAVE_OUT_BITS);
+    wave->value = wave->acc >> (wave->acc_bits - wave->out_bits);
 }
 
 static void wave_saw_down(wave_t *wave)
 {
     wave->acc += wave->freq;
-    wave->acc &= WAVE_ACC_MASK;
+    wave->acc &= wave->acc_mask;
 
-    wave->value = WAVE_OUT_MASK - (wave->acc >> (WAVE_ACC_BITS - WAVE_OUT_BITS));
+    wave->value = wave->out_mask - (wave->acc >> (wave->acc_bits - wave->out_bits));
 }
 
 static void wave_sqr(wave_t *wave)
 {
     wave->acc += wave->freq;
-    wave->acc &= WAVE_ACC_MASK;
+    wave->acc &= wave->acc_mask;
 
-    wave->value = (int32_t)(wave->acc << (32 - WAVE_ACC_BITS)) >> 31 & WAVE_OUT_MASK;
+    wave->value = (int32_t)(wave->acc << (32 - wave->acc_bits)) >> 31 & wave->out_mask;
 }
 
 static void wave_tri(wave_t *wave)
@@ -32,12 +32,12 @@ static void wave_tri(wave_t *wave)
     int32_t temp, mask;
 
     wave->acc += wave->freq;
-    wave->acc &= WAVE_ACC_MASK;
+    wave->acc &= wave->acc_mask;
 
-    temp = wave->acc << (32 - WAVE_ACC_BITS);
+    temp = wave->acc << (32 - wave->acc_bits);
     mask = temp >> 31;
 
-    wave->value = (uint32_t)(temp ^ mask) >> (31 - WAVE_OUT_BITS);
+    wave->value = (uint32_t)(temp ^ mask) >> (31 - wave->out_bits);
 }
 
 static void wave_noise(wave_t *wave)
@@ -51,7 +51,7 @@ static void wave_noise(wave_t *wave)
     lfsr >>= 1;
     lfsr ^= (-lsb) & 0xA3000000; // taps 32, 30, 26, 25
 
-    wave->value = ((int32_t)lfsr >> 31) & WAVE_OUT_MASK;
+    wave->value = ((int32_t)lfsr >> 31) & wave->out_mask;
 }
 
 static void wave_sh(wave_t *wave)
@@ -76,11 +76,11 @@ static void wave_sh(wave_t *wave)
 
     // increment acc.
     wave->acc += wave->freq;
-    wave->acc &= WAVE_ACC_MASK;
+    wave->acc &= wave->acc_mask;
 
     // new sample on overflow
     if (wave->acc < acc_prev)
-        wave->value = lfsr & WAVE_OUT_MASK;
+        wave->value = lfsr & wave->out_mask;
 }
 
 static wave_func_t wave_funcs[NUM_WAVE_TYPES] = 
@@ -95,11 +95,16 @@ static wave_func_t wave_funcs[NUM_WAVE_TYPES] =
 
 // static_assert(sizeof(wave_funcs)/sizeof(wave_func_t) == NUM_WAVE_TYPES)
 
-void wave_init(wave_t *wave)
+void wave_init(wave_t *wave, uint8_t num_out_bits, uint8_t num_acc_bits)
 {
     wave->acc = 0;
     wave->value = 0;
 
+    wave->out_bits = num_out_bits;
+    wave->out_mask = (1 << num_out_bits) - 1;
+    wave->acc_bits = num_acc_bits;
+    wave->acc_mask = (1 << num_acc_bits) - 1;
+    
     wave->func = wave_funcs[0];
     wave->freq = 0;
 }
