@@ -16,7 +16,7 @@ typedef struct debouncer_t_
 
     uint32_t port_held;
 
-    uint32_t port_mask; // 0 = ignore bit, 1 = monitor bit
+    uint32_t port_mon_mask; // 0 = ignore bit, 1 = monitor bit
     uint32_t port_inv_mask; // 0 = active high, 1 = active low
 
     unsigned int hold_timer;
