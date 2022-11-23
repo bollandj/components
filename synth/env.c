@@ -36,6 +36,7 @@ static void env_lin(env_t *env)
 
         default:
             env->acc = 0u;
+            break;
     }
 
     env->value = env->acc >> (env->acc_bits - env->out_bits);
@@ -79,6 +80,7 @@ static void env_exp(env_t *env)
 
         default:
             env->acc = 0u;
+            break;
     }
 
     env->value = env->acc >> (env->acc_bits - env->out_bits);
