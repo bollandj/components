@@ -8,7 +8,7 @@
 #include "midi_defs.h"
 
 /* Keep track of MIDI state */
-typedef struct midi_handler 
+typedef struct midi_handler
 {
     uint8_t rx_ptr;
     uint8_t rx_buf[3];
@@ -18,7 +18,7 @@ typedef struct midi_handler
     uint8_t mono_mode;
 } midi_handler_t;
 
-typedef struct midi 
+typedef struct midi
 {
     uint8_t status;
     uint8_t data_0;
