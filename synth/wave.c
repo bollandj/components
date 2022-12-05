@@ -61,11 +61,11 @@ static void wave_sh(wave_t *wave)
 
 static wave_func_t wave_funcs[NUM_WAVE_TYPES] = 
 {
-    wave_saw_up,
-    wave_saw_down,
-    wave_sqr,
-    wave_tri,
-    wave_sh,	
+    [WAVE_TYPE_SAW_UP] = wave_saw_up,
+    [WAVE_TYPE_SAW_DOWN] = wave_saw_down,
+    [WAVE_TYPE_SQR] = wave_sqr,
+    [WAVE_TYPE_TRI] = wave_tri,
+    [WAVE_TYPE_SH] = wave_sh,	
 };
 
 // static_assert(sizeof(wave_funcs)/sizeof(wave_func_t) == NUM_WAVE_TYPES)

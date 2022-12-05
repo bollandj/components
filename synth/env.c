@@ -88,8 +88,8 @@ static void env_exp(env_t *env)
 
 static env_func_t env_funcs[NUM_ENV_TYPES] =
 {
-    env_lin,
-    env_exp
+    [ENV_TYPE_LIN] = env_lin,
+    [ENV_TYPE_EXP] = env_exp
 };
 
 // static_assert(sizeof(env_funcs)/sizeof(env_func_t) == NUM_ENV_TYPES)
