@@ -5,6 +5,8 @@
 
 static void env_lin(env_t *env)
 {
+    env->value = env->acc >> (env->acc_bits - env->out_bits);
+
     switch (env->state)
     {
         case ENV_ATT:
@@ -36,13 +38,14 @@ static void env_lin(env_t *env)
 
         default:
             env->acc = 0u;
-    }
-
-    env->value = env->acc >> (env->acc_bits - env->out_bits);
+            break;
+    }  
 }
 
 static void env_exp(env_t *env)
 {
+    env->value = env->acc >> (env->acc_bits - env->out_bits);
+    
     int32_t diff;
 
     switch (env->state)
@@ -79,15 +82,14 @@ static void env_exp(env_t *env)
 
         default:
             env->acc = 0u;
+            break;
     }
-
-    env->value = env->acc >> (env->acc_bits - env->out_bits);
 }
 
 static env_func_t env_funcs[NUM_ENV_TYPES] =
 {
-    env_lin,
-    env_exp
+    [ENV_TYPE_LIN] = env_lin,
+    [ENV_TYPE_EXP] = env_exp
 };
 
 // static_assert(sizeof(env_funcs)/sizeof(env_func_t) == NUM_ENV_TYPES)

@@ -74,13 +74,12 @@ enum midi_channels {
 };
 
 /* Macros */
-#define MIDI_IS_COMMAND(x) (x & 0x80)
-#define MIDI_IS_DATA(x)    (!(x & 0x80))
+#define MIDI_IS_COMMAND(x) ((x) & 0x80)
+#define MIDI_IS_DATA(x) (!((x) & 0x80))
 
-#define MIDI_IS_SYSTEM_REAL_TIME(x) ((x & 0xF8) == 0xF8) // sys RT messages occupy 0xF8 - 0xFF
-#define MIDI_IS_SYSTEM_MESSAGE(x)   ((x & 0xF0) == 0xF0)
+#define MIDI_IS_SYSTEM_REAL_TIME(x) (((x) & 0xF8) == 0xF8) // System Real-Time messages occupy 0xF8 - 0xFF
+#define MIDI_IS_SYSTEM_MESSAGE(x) (((x) & 0xF0) == 0xF0)
 
-#define MIDI_OMNI_OFF 0
-#define MIDI_OMNI_ON  1
+#define MIDI_CHANNEL_FROM_STATUS(x) ((x) & 0x0F)
 
 #endif /* MIDI_DEFS_H_ */

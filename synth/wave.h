@@ -29,7 +29,6 @@ typedef enum
     WAVE_TYPE_SAW_DOWN,
     WAVE_TYPE_SQR,
     WAVE_TYPE_TRI,
-    WAVE_TYPE_NOISE,
     WAVE_TYPE_SH,
     NUM_WAVE_TYPES
 } wave_type_t;
@@ -38,6 +37,7 @@ void wave_init(wave_t *wave, uint8_t num_out_bits, uint8_t num_acc_bits);
 
 inline void wave_update(wave_t *wave) {wave->func(wave);};
 inline uint16_t wave_get_value(wave_t *wave) {return wave->value;};
+inline void wave_reset(wave_t *wave) {wave->acc = 0;};
 
 inline void wave_set_freq(wave_t *wave, uint32_t freq) {wave->freq = freq;};
 void wave_set_type(wave_t *wave, wave_type_t type);
