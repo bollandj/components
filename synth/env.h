@@ -47,17 +47,17 @@ typedef enum
 
 void env_init(env_t *env, uint8_t num_out_bits, uint8_t num_acc_bits);
 
-inline void env_update(env_t *env) {env->func(env);};
-inline uint16_t env_get_value(env_t *env) {return env->value;};
-inline void env_reset(env_t *env) {env->state = ENV_OFF; env->acc = 0;};
+static inline void env_update(env_t *env) {env->func(env);};
+static inline uint16_t env_get_value(env_t *env) {return env->value;};
+static inline void env_reset(env_t *env) {env->state = ENV_OFF; env->acc = 0;};
 
-inline void env_gate_on(env_t *env) {env->state = ENV_ATT;};
-inline void env_gate_off(env_t *env) {env->state = ENV_REL;};
+static inline void env_gate_on(env_t *env) {env->state = ENV_ATT;};
+static inline void env_gate_off(env_t *env) {env->state = ENV_REL;};
 
-inline void env_set_attack(env_t *env, uint16_t attack) {env->attack = attack;};
-inline void env_set_decay(env_t *env, uint16_t decay) {env->decay = decay;};
-inline void env_set_sustain(env_t *env, uint32_t sustain) {env->sustain = sustain;};
-inline void env_set_release(env_t *env, uint16_t release) {env->release = release;};
+static inline void env_set_attack(env_t *env, uint16_t attack) {env->attack = attack;};
+static inline void env_set_decay(env_t *env, uint16_t decay) {env->decay = decay;};
+static inline void env_set_sustain(env_t *env, uint32_t sustain) {env->sustain = sustain;};
+static inline void env_set_release(env_t *env, uint16_t release) {env->release = release;};
 void env_set_type(env_t *env, env_type_t type);
 
 #endif /* ENV_H_ */
